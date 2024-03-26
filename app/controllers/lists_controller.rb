@@ -1,11 +1,38 @@
 class ListsController < ApplicationController
   def index
-    @movies = Movies.all
     @lists = lists.all
   end
 
   def show
-    @movies = Movies.all(params(:id))
-    @movies = Movies.show
+    @bookmark = Bookmark.new
+    @review = Review.new(list: @list)
+  end
+
+  def new
+    @list = List.new
+  end
+
+  def create
+    @list = List.new(list_params)
+    if @list.save
+      redirect_to list_path(@list)
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @list.destroy
+    redirect_to lists_path, status: :see_other
+  end
+
+  private
+
+  def set_list
+    @list = List.find(params[:id])
+  end
+
+  def list_params
+    params.require(:list).permit(:name, :photo)
   end
 end
