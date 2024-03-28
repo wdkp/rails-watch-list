@@ -1,6 +1,8 @@
 class ListsController < ApplicationController
+  before_action :set_list, only: [:show, :destroy]
+
   def index
-    @lists = lists.all
+    @lists = List.all
   end
 
   def show
